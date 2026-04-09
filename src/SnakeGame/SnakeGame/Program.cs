@@ -57,5 +57,12 @@ while (true)
     snakeX += dirX;
     snakeY += dirY;
     
+    if (snakeX < 0 || snakeX >= width || snakeY < 0 || snakeY >= height)
+    {
+        Console.Clear();
+        Console.WriteLine("Game Over!");
+        break;
+    }
+    
     Thread.Sleep(200);
 }
