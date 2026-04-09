@@ -1,3 +1,15 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using System;
 
-Console.WriteLine("Hello, World!");
+int width = 20;
+int height = 10;
+
+Console.CursorVisible = false;
+
+for (int y = 0; y < height; y++)
+{
+    for (int x = 0; x < width; x++)
+    {
+        Console.Write("#");
+    }
+    Console.WriteLine();
+}
