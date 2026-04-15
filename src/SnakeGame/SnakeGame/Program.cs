@@ -19,6 +19,8 @@ int dirY = 0;
 var random = new Random();
 (int x, int y) food = (10, 3);
 
+int score = 0;
+
 Console.CursorVisible = false;
 
 while (true)
@@ -40,27 +42,30 @@ while (true)
         Console.WriteLine();
     }
 
+    // Score
+    Console.WriteLine($"\nScore: {score}");
+
     // Input
     if (Console.KeyAvailable)
     {
         var key = Console.ReadKey(true).Key;
 
-        if (key == ConsoleKey.UpArrow)
+        if (key == ConsoleKey.UpArrow && dirY != 1)
         {
             dirX = 0;
             dirY = -1;
         }
-        if (key == ConsoleKey.DownArrow)
+        if (key == ConsoleKey.DownArrow && dirY != -1)
         {
             dirX = 0;
             dirY = 1;
         }
-        if (key == ConsoleKey.LeftArrow)
+        if (key == ConsoleKey.LeftArrow && dirX != 1)
         {
             dirX = -1;
             dirY = 0;
         }
-        if (key == ConsoleKey.RightArrow)
+        if (key == ConsoleKey.RightArrow && dirX != -1)
         {
             dirX = 1;
             dirY = 0;
@@ -71,27 +76,31 @@ while (true)
     var head = snake[0];
     var newHead = (x: head.x + dirX, y: head.y + dirY);
 
-    // 💀 Vägg-kollision
+    // Wall-Collision
     if (newHead.x < 0 || newHead.x >= width || newHead.y < 0 || newHead.y >= height)
     {
         Console.Clear();
-        Console.WriteLine("Game Over!");
+        Console.WriteLine("=== GAME OVER ===");
+        Console.WriteLine($"Final Score: {score}");
+        break;
+    }
+
+    // Self-Collision
+    if (snake.Any(s => s == newHead))
+    {
+        Console.Clear();
+        Console.WriteLine("=== GAME OVER ===");
+        Console.WriteLine("You hit yourself!");
+        Console.WriteLine($"Final Score: {score}");
         break;
     }
 
     snake.Insert(0, newHead);
-    
-    // Collision
-    if (snake.Skip(1).Any(s => s == newHead))
-    {
-        Console.Clear();
-        Console.WriteLine("Game Over! You hit yourself.");
-        break;
-    }
 
     // Food
     if (newHead == food)
     {
+        score++;
         food = (random.Next(width), random.Next(height));
     }
     else
