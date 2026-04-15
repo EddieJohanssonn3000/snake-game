@@ -80,6 +80,14 @@ while (true)
     }
 
     snake.Insert(0, newHead);
+    
+    // Collision
+    if (snake.Skip(1).Any(s => s == newHead))
+    {
+        Console.Clear();
+        Console.WriteLine("Game Over! You hit yourself.");
+        break;
+    }
 
     // Food
     if (newHead == food)
