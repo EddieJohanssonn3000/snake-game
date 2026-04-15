@@ -69,7 +69,7 @@ while (true)
 
     // Movement
     var head = snake[0];
-    var newHead = (head.x + dirX, head.y + dirY);
+    var newHead = (x: head.x + dirX, y: head.y + dirY);
 
     // 💀 Vägg-kollision
     if (newHead.x < 0 || newHead.x >= width || newHead.y < 0 || newHead.y >= height)
