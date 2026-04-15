@@ -5,7 +5,8 @@ using System.Threading;
 
 Console.CursorVisible = false;
 
-while (true) // Restart-loop
+// Loop
+while (true) 
 {
     int width = 20;
     int height = 10;
