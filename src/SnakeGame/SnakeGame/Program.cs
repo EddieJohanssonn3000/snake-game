@@ -1,11 +1,17 @@
 ﻿using System;
 using System.Threading;
+using System.Collections.Generic;
+using System.Linq;
+
+var snake = new List<(int x, int y)>
+{
+    (5, 5),
+    (4, 5),
+    (3, 5)
+};
 
 int width = 20;
 int height = 10;
-
-int snakeX = 5;
-int snakeY = 5;
 
 int dirX = 1;
 int dirY = 0;
@@ -20,7 +26,9 @@ while (true)
     {
         for (int x = 0; x < width; x++)
         {
-            if (x == snakeX && y == snakeY)
+            bool isSnake = snake.Any(s => s.x == x && s.y == y);
+
+            if (isSnake)
                 Console.Write("O");
             else
                 Console.Write(".");
@@ -54,10 +62,13 @@ while (true)
         }
     }
     
-    snakeX += dirX;
-    snakeY += dirY;
+    var head = snake[0];
+    var newHead = (head.x + dirX, head.y + dirY);
+
+    snake.Insert(0, newHead);
+    snake.RemoveAt(snake.Count - 1);
     
-    if (snakeX < 0 || snakeX >= width || snakeY < 0 || snakeY >= height)
+    if (newHead.x < 0 || newHead.x >= width || newHead.y < 0 || newHead.y >= height)
     {
         Console.Clear();
         Console.WriteLine("Game Over!");
