@@ -1,7 +1,10 @@
 ﻿using System;
-using System.Threading;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+
+int width = 20;
+int height = 10;
 
 var snake = new List<(int x, int y)>
 {
@@ -10,11 +13,11 @@ var snake = new List<(int x, int y)>
     (3, 5)
 };
 
-int width = 20;
-int height = 10;
-
 int dirX = 1;
 int dirY = 0;
+
+var random = new Random();
+(int x, int y) food = (10, 3);
 
 Console.CursorVisible = false;
 
@@ -22,13 +25,14 @@ while (true)
 {
     Console.Clear();
 
+    // Gameboard
     for (int y = 0; y < height; y++)
     {
         for (int x = 0; x < width; x++)
         {
-            bool isSnake = snake.Any(s => s.x == x && s.y == y);
-
-            if (isSnake)
+            if (x == food.x && y == food.y)
+                Console.Write("X");
+            else if (snake.Any(s => s.x == x && s.y == y))
                 Console.Write("O");
             else
                 Console.Write(".");
@@ -36,8 +40,9 @@ while (true)
         Console.WriteLine();
     }
 
+    // Input
     if (Console.KeyAvailable)
-    { 
+    {
         var key = Console.ReadKey(true).Key;
 
         if (key == ConsoleKey.UpArrow)
@@ -61,19 +66,30 @@ while (true)
             dirY = 0;
         }
     }
-    
+
+    // Movement
     var head = snake[0];
     var newHead = (head.x + dirX, head.y + dirY);
 
-    snake.Insert(0, newHead);
-    snake.RemoveAt(snake.Count - 1);
-    
+    // 💀 Vägg-kollision
     if (newHead.x < 0 || newHead.x >= width || newHead.y < 0 || newHead.y >= height)
     {
         Console.Clear();
         Console.WriteLine("Game Over!");
         break;
     }
-    
+
+    snake.Insert(0, newHead);
+
+    // Food
+    if (newHead == food)
+    {
+        food = (random.Next(width), random.Next(height));
+    }
+    else
+    {
+        snake.RemoveAt(snake.Count - 1);
+    }
+
     Thread.Sleep(200);
 }
